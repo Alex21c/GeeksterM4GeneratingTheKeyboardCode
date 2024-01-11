@@ -14,7 +14,7 @@ document.addEventListener('keydown', function(e){
   elementYouPressed.innerHTML=`You pressed &nbsp;<span class='keyPressed historyItem'>${keyPressed}<span>`;
   elementKeyCode.innerHTML = keyCode;
   elementKeyCode.className = 'historyItem keyPressed';  
-  if(!['control', 'alt', 'shift'].includes(keyPressed.toLowerCase())){
+  if(!['ctrl', 'alt', 'shift', 'ctrl + alt', 'ctrl + shift', 'alt + shift', 'ctrl + alt + shift'].includes(keyPressed.toLowerCase())){
     updateHistoryLastNKeys(keyPressed);
   }
 });
@@ -23,9 +23,28 @@ document.addEventListener('keydown', function(e){
 function getKeyPressedAndKeyCode(e){
   let keyPressed = "";
   let keycode=null;
-  if(e.ctrlKey && e.altKey){
+  if(e.ctrlKey && e.altKey && e.shiftKey){
+    keyPressed = `Ctrl + Alt + Shift`;
+    // console.log('okay processing!', e.key);
+    if(e.key.toLocaleLowerCase() !== 'alt' && e.key.toLocaleLowerCase() !== 'control' && e.key.toLocaleLowerCase() !== 'shift'){
+      keyPressed += ` + ${e.key}`;
+    }     
+  }else if(e.ctrlKey && e.altKey){
     keyPressed = `Ctrl + Alt`;
-    if(e.key.toLocaleLowerCase() !== 'alt'){
+    // console.log('okay processing!', e.key);
+    if(e.key.toLocaleLowerCase() !== 'alt' && e.key.toLocaleLowerCase() !== 'control'){
+      keyPressed += ` + ${e.key}`;
+    }     
+  }else  if(e.altKey && e.shiftKey){
+    keyPressed = `Alt + Shift`;
+    // console.log('okay processing!', e.key);
+    if(e.key.toLocaleLowerCase() !== 'alt' && e.key.toLocaleLowerCase() !== 'shift'){
+      keyPressed += ` + ${e.key}`;
+    }     
+  }else  if(e.ctrlKey && e.shiftKey){
+    keyPressed = `Ctrl + Shift`;
+    // console.log('okay processing!', e.key);
+    if(e.key.toLocaleLowerCase() !== 'control' && e.key.toLocaleLowerCase() !== 'shift'){
       keyPressed += ` + ${e.key}`;
     }     
   }else if(e.ctrlKey || e.altKey){
@@ -52,7 +71,7 @@ function getKeyPressedAndKeyCode(e){
 
 
 function updateHistoryLastNKeys(keyPressed){
-  console.log(lastSevenKeysHistory);
+  // console.log(lastSevenKeysHistory);
   lastSevenKeysHistory.push(keyPressed);
   if(lastSevenKeysHistory.length >=keysHistorySize){
     lastSevenKeysHistory.shift();
@@ -65,7 +84,7 @@ function updateHistoryLastNKeys(keyPressed){
     let textNode= document.createTextNode(key);
     li.appendChild(textNode);
     elementHistoryLast7KeyPresses.appendChild(li);
-    console.log(key);
+    // console.log(key);
   }
   
 }
