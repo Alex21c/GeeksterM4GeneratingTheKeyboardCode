@@ -2,20 +2,21 @@
 let elementYouPressed = document.querySelector('#youPressed');
 let elementKeyCode = document.querySelector('#keyCode');
 let lastSevenKeysHistory = [];
-let keysHistorySize = 21;
+let keysHistorySize = 99;
 let elementHistoryLast7KeyPresses = document.querySelector('#historyLast7KeyPresses');
 
 document.addEventListener('keydown', function(e){
+  e.preventDefault();
   // console.log(e, e.key, e.ctrlKey, e.keyCode);
   // console.log(getKeyPressedAndKeyCode(e));
   let {keyPressed, keyCode} = getKeyPressedAndKeyCode(e);
   // console.log(keyCode, keyPressed);
   elementYouPressed.innerHTML=`You pressed &nbsp;<span class='keyPressed historyItem'>${keyPressed}<span>`;
   elementKeyCode.innerHTML = keyCode;
-  elementKeyCode.className = 'historyItem keyPressed';
-
-  
-  updateHistoryLastNKeys(keyPressed);
+  elementKeyCode.className = 'historyItem keyPressed';  
+  if(!['control', 'alt', 'shift'].includes(keyPressed.toLowerCase())){
+    updateHistoryLastNKeys(keyPressed);
+  }
 });
 
 
